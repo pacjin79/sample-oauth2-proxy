@@ -1,0 +1,113 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "ADP Integration"
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+  oauth_google:
+    type: oauth2
+    authorizationUrl: https://accounts.google.com/o/oauth2/auth
+    flow: implicit
+    scopes:
+      write:calendar: modify calendar events
+      read:calendar: read calendar events
+paths:
+  /workers:
+     x-swagger-router-controller: worker.controller
+     get:
+        description: Retrieves workers from ADP
+        operationId: workers
+        security:
+        - oauth_google:
+          - write:calendar
+          - read:calendar
+        parameters:
+          - name: name
+            in: query
+            description: ""
+            required: false
+            type: string
+        responses:
+          "200":
+            description: Success
+            schema:
+              $ref: "#/definitions/HelloWorldResponse"
+          default:
+            description: Error
+            schema:
+              $ref: "#/definitions/ErrorResponse"
+  /auth:
+     x-swagger-router-controller: auth.controller
+     post:
+        description: Authenticate
+        operationId: auth
+        consumes:
+          - application/json
+        parameters:
+          - in: body
+            name: credentials
+            description: Log on creds
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+  /oauth2/callback:
+     x-swagger-router-controller: auth.controller
+     post:
+        description: Authenticate
+        operationId: callback
+        consumes:
+          - application/json
+        parameters:
+          - in: body
+            name: credentials
+            description: Log on creds
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        responses:
+          "200":
+            description: Success
+          default:
+            description: Error
+  /swagger:
+      x-swagger-pipe: swagger_raw
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
