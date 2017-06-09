@@ -14,17 +14,17 @@ gulp.task('compile-server', () => {
 gulp.task('copy-swagger-config', () => {
     return gulp.src('server/src/api/swagger/**/*')
         .pipe(gulp.dest('build/api/swagger'));
-})
+});
 
 gulp.task('copy-swagger-ui', () => {
     return gulp.src('swagger-ui/**/*')
         .pipe(gulp.dest('build/swagger-ui'));
-})
+});
 
 gulp.task('copy-config', ['copy-swagger-config', 'copy-swagger-ui'], () => {
     return gulp.src('server/src/config/**/*')
         .pipe(gulp.dest('build/config'));
-})
+});
 
 gulp.task('dev', ['compile-server', 'copy-config'], () => {
     nodemon({
@@ -32,5 +32,5 @@ gulp.task('dev', ['compile-server', 'copy-config'], () => {
         ext: 'js, ts',
         tasks: ['compile-server'],
         watch: 'server'
-    })
+    });
 });

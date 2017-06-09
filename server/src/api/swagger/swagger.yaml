@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: "ADP Integration"
+  title: "Starter APIs"
 host: localhost:3000
 basePath: /
 schemes:
